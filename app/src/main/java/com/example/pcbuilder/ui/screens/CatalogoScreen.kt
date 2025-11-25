@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +58,7 @@ fun CatalogScreen(
     viewModel: CatalogoViewModel,
     cartViewModel: CartViewModel
 ) {
+    val valorDolar by viewModel.valorDolar.collectAsState()
     val productos by viewModel.productos.collectAsState(initial = emptyList())
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -113,6 +115,7 @@ fun CatalogScreen(
             items(productos) { producto ->
                 ProductCard(
                     producto = producto,
+                    valorDolar = valorDolar,
                     onClick = {
                     },
                     onAddToCartClick = {
@@ -143,6 +146,7 @@ fun CatalogScreen(
 @Composable
 fun ProductCard(
     producto: Product,
+    valorDolar: Double?,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onAddToCartClick: () -> Unit
@@ -183,13 +187,24 @@ fun ProductCard(
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    val precioEnPesos = producto.price.toLong()
-                    Text(
-                        text = "$${String.format(Locale.getDefault(), "%,d", precioEnPesos)}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    )
+                    Column(modifier = Modifier.align(Alignment.CenterStart)) {
+                        val precioEnPesos = producto.price.toLong()
+                        Text(
+                            text = "$${String.format(Locale.getDefault(), "%,d", precioEnPesos)}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+
+                        if (valorDolar != null && valorDolar > 0) {
+                            val precioUsd = producto.price / valorDolar
+                            Text(
+                                text = "(US$ ${String.format(Locale.US, "%.2f", precioUsd)})",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Gray
+                            )
+                        }
+                    }
+
                     IconButton(
                         onClick = onAddToCartClick,
                         modifier = Modifier.align(Alignment.CenterEnd)
