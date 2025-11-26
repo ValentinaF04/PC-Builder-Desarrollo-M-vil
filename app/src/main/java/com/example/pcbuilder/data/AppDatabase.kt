@@ -11,7 +11,7 @@ import com.example.pcbuilder.data.dao.UserDao
 import com.example.pcbuilder.data.model.Product
 import com.example.pcbuilder.data.model.User
 
-@Database(entities = [User::class, Product::class, CartItem::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Product::class, CartItem::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao

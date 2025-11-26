@@ -1,65 +1,45 @@
 package com.example.pcbuilder.ui.theme
 
 import android.app.Activity
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = PCBuilderAzul,
+private val CyberColorScheme = darkColorScheme(
+    primary = NeonPurple,
     onPrimary = Color.White,
-    background = PCBuilderNegro,
-    onBackground = PCBuilderBlanco,
-    surface = PCBuilderNegro,  //Fondo de las tarjetas
-    onSurface = PCBuilderBlanco,    //Texto sobre las tarjetas 
-    error = PCBuilderRojo,
-    onError = Color.White,
-    outline = PCBuilderGris,    //Borde gris 
-    secondary = PCBuilderGris,
-    onSecondary = PCBuilderBlanco
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = PCBuilderAzul, //Para botones 
-    onPrimary = Color.White,  //Texto sobre el color primario
-    background = PCBuilderBlanco, //Color de fondo 
-    onBackground = PCBuilderNegro, //Texto sobre el fondo
-    surface = PCBuilderBlanco, //Color para tarjetas y menus
-    onSurface = PCBuilderNegro, //Texto sobre superficies
-    error = PCBuilderRojo, //Color para errores
-    onError = Color.White, //Texto sobre el color de error
-    outline = PCBuilderGris,  //Borde para Textfields
-    secondary = PCBuilderGris,  //Color secundario
-    onSecondary = PCBuilderNegro  //Texto sobre el color secundario
+    secondary = NeonBlue,
+    onSecondary = Color.Black,
+    background = DeepViolet,
+    onBackground = TextWhite,
+    surface = SurfaceViolet, // Color base de las tarjetas
+    onSurface = TextWhite,
+    error = Color(0xFFCF6679),
+    outline = NeonBlue // Usaremos esto para bordes brillantes
 )
 
 @Composable
 fun PCBuilderTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            // Hacemos la barra de estado del mismo color que el fondo profundo
+            window.statusBarColor = DeepViolet.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
+        colorScheme = CyberColorScheme,
+        typography = Typography, // Asegúrate de tener Typography definido o usa el default
         content = content
     )
 }
