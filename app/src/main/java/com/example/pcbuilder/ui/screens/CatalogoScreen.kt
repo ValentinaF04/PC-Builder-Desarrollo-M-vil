@@ -1,21 +1,29 @@
 package com.example.pcbuilder.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -147,73 +156,95 @@ fun CatalogScreen(
 fun ProductCard(
     producto: Product,
     valorDolar: Double?,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onAddToCartClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        onClick = onClick
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .clickable { onClick() },
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column {
-            val imageUrlForCoil = if (producto.imageUrl.isNullOrBlank()) {
-                null
-            } else {
-                producto.imageUrl
-            }
+            Box(modifier = Modifier.height(150.dp)) {
+                val imageUrlForCoil = if (producto.imageUrl.isNullOrBlank()) null else producto.imageUrl
 
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrlForCoil)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "Imagen de ${producto.name}",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageUrlForCoil)
+                        .crossfade(true)
+                        .error(android.R.drawable.ic_menu_gallery)
+                        .build(),
+                    contentDescription = producto.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                if (producto.stock < 5) {
+                    Surface(
+                        color = Color.Red.copy(alpha = 0.8f),
+                        modifier = Modifier.padding(8.dp).align(Alignment.TopEnd),
+                        shape = RoundedCornerShape(4.dp)
+                    ) {
+                        Text(
+                            text = "¡Últimos!",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+            }
 
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     text = producto.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    minLines = 2
                 )
 
-                Box(
-                    modifier = Modifier.fillMaxWidth()
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "$${String.format(Locale.getDefault(), "%,d", producto.price.toLong())}",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.ExtraBold
+                )
+
+                if (valorDolar != null && valorDolar > 0) {
+                    val precioUsd = producto.price / valorDolar
+                    Text(
+                        text = "US$ ${String.format(Locale.US, "%.2f", precioUsd)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = onAddToCartClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
                 ) {
-                    Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                        val precioEnPesos = producto.price.toLong()
-                        Text(
-                            text = "$${String.format(Locale.getDefault(), "%,d", precioEnPesos)}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-
-                        if (valorDolar != null && valorDolar > 0) {
-                            val precioUsd = producto.price / valorDolar
-                            Text(
-                                text = "(US$ ${String.format(Locale.US, "%.2f", precioUsd)})",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = Color.Gray
-                            )
-                        }
-                    }
-
-                    IconButton(
-                        onClick = onAddToCartClick,
-                        modifier = Modifier.align(Alignment.CenterEnd)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.AddShoppingCart,
-                            contentDescription = "Agregar al carrito"
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.Default.AddShoppingCart,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Agregar")
                 }
             }
         }
