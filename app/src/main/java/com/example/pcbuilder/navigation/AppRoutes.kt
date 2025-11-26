@@ -17,7 +17,7 @@ object AppRoutes{
     // Ruta base para añadir/editar
     const val ADD_EDIT_PRODUCT_SCREEN = "add_edit_product"
 
-    // Ruta completa con argumento opcional: "add_edit_product?productId={productId}"
+
     const val ADD_EDIT_PRODUCT_ROUTE = "$ADD_EDIT_PRODUCT_SCREEN?$PRODUCT_ID_ARG={$PRODUCT_ID_ARG}"
 
 

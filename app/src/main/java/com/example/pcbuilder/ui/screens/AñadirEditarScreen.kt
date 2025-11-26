@@ -29,7 +29,7 @@ fun AddEditProductScreen(
     var description by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var stock by remember { mutableStateOf("") }
-    var imageUrl by remember { mutableStateOf("") } // <-- NUEVO CAMPO
+    var imageUrl by remember { mutableStateOf("") }
 
     if (isEditMode) {
         val productState by viewModel.getProduct(productId!!).collectAsState(initial = null)
@@ -67,7 +67,7 @@ fun AddEditProductScreen(
                         description = description,
                         price = priceDouble,
                         stock = stockInt,
-                        imageUrl = imageUrl, // <-- NUEVO CAMPO
+                        imageUrl = imageUrl,
                         id = productId ?: 0
                     )
                     navController.popBackStack()
@@ -115,7 +115,7 @@ fun AddEditProductScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // --- ¡CAMPO AÑADIDO! ---
+
             OutlinedTextField(
                 value = imageUrl,
                 onValueChange = { imageUrl = it },

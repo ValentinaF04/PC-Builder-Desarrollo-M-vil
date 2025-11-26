@@ -193,7 +193,7 @@ fun CyberTextField(
     passwordVisible: Boolean = false,
     onTogglePassword: () -> Unit = {}
 ) {
-    // CORRECCIÓN AQUÍ: Se usa OutlinedTextFieldDefaults.colors
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,

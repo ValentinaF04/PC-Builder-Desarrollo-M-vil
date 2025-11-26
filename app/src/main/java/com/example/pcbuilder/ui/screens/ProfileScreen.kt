@@ -66,7 +66,7 @@ fun ProfileScreen(navController: NavController, factory: AppViewModelFactory) {
             if (u != null) {
                 nombre = u.name
                 email = u.email
-                // Ahora estos campos SI existen en User
+
                 direccion = u.direccion ?: ""
                 if (u.profileImageUri != null) {
                     selectedImageUri = Uri.parse(u.profileImageUri)
