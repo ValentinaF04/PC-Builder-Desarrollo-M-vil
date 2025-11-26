@@ -9,5 +9,7 @@ data class User(
     val name: String,
     val email: String,
     val password: String,
-    val isAdmin: Boolean = false
+    val isAdmin: Boolean = false,
+    val direccion: String? = null,
+    val profileImageUri: String? = null
 )

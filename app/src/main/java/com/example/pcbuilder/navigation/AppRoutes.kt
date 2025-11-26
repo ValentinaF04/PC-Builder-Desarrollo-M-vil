@@ -9,7 +9,7 @@ object AppRoutes{
     const val CART_SCREEN = "cart"
     const val CHECKOUT_SCREEN = "checkout"
 
-
+    const val PROFILE_SCREEN = "perfil"
 
     // Argumento para la pantalla de edición
     const val PRODUCT_ID_ARG = "productId"
