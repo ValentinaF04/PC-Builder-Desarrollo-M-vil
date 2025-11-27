@@ -4,6 +4,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
+
+//API EXTERNA (INDICADORES ECONÓMICOS - DÓLAR)
+
+
 data class DollarResponse(
     val serie: List<SerieInfo>
 )
@@ -13,7 +17,7 @@ data class SerieInfo(
 )
 
 interface DollarApiService {
-    @GET("api/dolar") 
+    @GET("api/dolar")
     suspend fun getDollarValue(): DollarResponse
 }
 
@@ -26,5 +30,21 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DollarApiService::class.java)
+    }
+}
+
+
+//API PROPIA (MICROSERVICIO EN AWS EC2)
+
+
+object BackendClient {
+    private const val BASE_URL = "http://50.16.251.38:8080/"
+
+    val service: PcBuilderApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(PcBuilderApiService::class.java)
     }
 }

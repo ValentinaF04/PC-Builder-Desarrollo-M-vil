@@ -2,6 +2,7 @@ package com.example.pcbuilder.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pcbuilder.data.api.BackendClient
 import com.example.pcbuilder.data.dao.ProductDao
 import com.example.pcbuilder.data.model.Product
 import kotlinx.coroutines.flow.Flow
@@ -39,6 +40,22 @@ class AdminViewModel(private val productDao: ProductDao) : ViewModel() {
                     stock = stock,
                     imageUrl = imageUrl
                 )
+
+
+                try {
+                    println("🚀 Admin: Intentando subir producto a AWS...")
+
+                    val response = BackendClient.service.createProduct(product)
+
+                    if (response.isSuccessful) {
+                        println("✅ ÉXITO: Producto '${product.name}' guardado en la Nube AWS.")
+                    } else {
+                        println("❌ ERROR NUBE: El servidor respondió con código ${response.code()}")
+                    }
+                } catch (e: Exception) {
+                    println("⚠️ MODO OFFLINE: No se pudo conectar a AWS (${e.message}). Se guardará solo localmente.")
+                }
+
                 productDao.insertProduct(product)
             }
         }
