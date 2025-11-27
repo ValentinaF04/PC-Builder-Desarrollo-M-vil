@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 // Base Colors
 val NeonPurple = Color(0xFFBC13FE) // Morado Neón
-val NeonBlue = Color(0xFF00E5FF)   // Tu azul cyan original, conservado para contraste
+val NeonBlue = Color(0xFF00E5FF)
 val DeepViolet = Color(0xFF120024) // Fondo principal (muy oscuro)
 val SurfaceViolet = Color(0xFF2A1535) // Superficies de tarjetas
 

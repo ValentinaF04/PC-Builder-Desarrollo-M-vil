@@ -20,7 +20,7 @@ private val CyberColorScheme = darkColorScheme(
     surface = SurfaceViolet, // Color base de las tarjetas
     onSurface = TextWhite,
     error = Color(0xFFCF6679),
-    outline = NeonBlue // Usaremos esto para bordes brillantes
+    outline = NeonBlue
 )
 
 @Composable
@@ -39,7 +39,7 @@ fun PCBuilderTheme(
 
     MaterialTheme(
         colorScheme = CyberColorScheme,
-        typography = Typography, // Asegúrate de tener Typography definido o usa el default
+        typography = Typography,
         content = content
     )
 }

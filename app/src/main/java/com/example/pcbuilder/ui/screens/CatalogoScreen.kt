@@ -174,9 +174,6 @@ fun ProductCard(
     onClick: () -> Unit,
     onAddToCartClick: () -> Unit
 ) {
-    // ... (El código de la tarjeta ProductCard se mantiene igual que la versión anterior mejorada) ...
-    // Copia aquí el contenido de ProductCard que te envié en la respuesta anterior para no hacerlo muy largo
-    // Si necesitas que lo repita, avísame. Pero es exactamente el mismo ProductCard "Glassmorphism".
     Card(
         modifier = Modifier
             .fillMaxWidth()

@@ -28,7 +28,7 @@ class ValidationLogicTest {
 
     @Test
     fun `contraseña corta retorna falso`() {
-        // Tu regla dice que debe ser >= 8 caracteres
+
         val clave = "12345"
         val esValida = clave.length >= 8
 
